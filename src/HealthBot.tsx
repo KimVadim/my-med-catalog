@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { List, Card } from 'antd-mobile';
+import { List, Card, Tag } from 'antd-mobile';
 import {
-  RightOutline,
   HeartOutline,
   FileOutline,
   UserOutline,
@@ -114,6 +113,7 @@ const HealthBot = () => {
                     width: 40,
                     height: 40,
                     borderRadius: '8px',
+                    marginTop: '12px',
                     backgroundColor: item.bgColor,
                     display: 'flex',
                     alignItems: 'center',
@@ -130,22 +130,29 @@ const HealthBot = () => {
                     gap: '8px'
                   }}>
                     <span style={{
+                      marginTop: '12px',
                       color: '#999',
                       fontSize: '14px'
                     }}>
-                      {item.count}
+                      <Tag
+                        color='#868686ff'
+                        fill='outline'
+                        style={{ '--border-radius': '6px', fontSize: '16px', }}
+                      >
+                        {item.count}
+                      </Tag>
                     </span>
-                    <RightOutline style={{ fontSize: 16, color: '#999' }} />
                   </div>
                 }
                 onClick={() => console.log(`Clicked: ${item.title}`)}
                 style={{
-                  padding: '12px 8px',
+                  padding: '8px 8px',
                   cursor: 'pointer',
                   backgroundColor: 'transparent'
                 }}
               >
                 <div style={{
+                  marginTop: '12px',
                   fontSize: '16px',
                   fontWeight: '500',
                   color: '#000'
