@@ -54,7 +54,7 @@ export default function CheckoutPage() {
           initialValues={{
             phone: '+7',
             product: product.title,
-            orderDt: dayjs(dayjs().format(FieldFormat.Date), FieldFormat.Date),
+            orderDt: dayjs(dayjs().format(FieldFormat.Date), FieldFormat.Date).toString(),
             amount: product.price.toString(),
           }}
           form={form}
