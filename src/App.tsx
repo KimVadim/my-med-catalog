@@ -1,8 +1,14 @@
-import React from 'react';
-import HealthBot from './HealthBot.tsx';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CatalogPage from "./pages/CatalogPage.tsx";
+import CheckoutPage from "./pages/CheckoutPage.tsx";
 
-const App: React.FC = () => {
-  return <HealthBot />;
-};
-
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<CatalogPage />} />
+        <Route path="/checkout/:productId" element={<CheckoutPage />} />
+      </Routes>
+    </Router>
+  );
+}
