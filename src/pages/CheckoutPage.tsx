@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Input, Button, Typography, Card, Form } from "antd";
+import { Input, Button, Typography, Card, Form, Divider } from "antd";
 import { useState } from "react";
 import { productItems } from "../data/ProductItems.tsx";
 import { addOrder, AddOrder } from "../service/appService.ts";
 import dayjs from "dayjs";
 import { FieldRules } from "../data/appConstant.ts";
+import { Grid } from "antd-mobile";
 
 const { Title, Text } = Typography;
 
@@ -20,7 +21,7 @@ export default function CheckoutPage() {
     addOrder(values).then(() => {
       setLoading(false);
       form.resetFields();
-      navigate(-1)
+      navigate('/');
       window.location.href = "https://pay.kaspi.kz/pay/4nxkybt1";
     });
   };
@@ -39,19 +40,22 @@ export default function CheckoutPage() {
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        <Title level={4}>Подтверждение заказа</Title>
+        <Title level={3}>Подтверждение заказа</Title>
         <Text type="secondary">
           Пожалуйста, проверьте детали и перейдите к оплате.
         </Text>
-
-        <div className="my-4 border-t" />
-
-        <Text strong>Продукт: </Text>{product.title}
-
+        <Divider />
+        <Grid columns={3} gap={8}>
+          <Grid.Item>
+            <Text strong  type="secondary">Продукт: </Text>
+          </Grid.Item>
+          <Grid.Item span={2}>
+            <Text strong>{product.title}</Text>
+          </Grid.Item>
+        </Grid>
         <Form
           layout="vertical"
           onFinish={handleSubmit}
-          className="mt-4"
           initialValues={{
             phone: '+7',
             product: product.title,
@@ -59,6 +63,9 @@ export default function CheckoutPage() {
             amount: product.price,
           }}
           form={form}
+          style={{
+            marginTop: "10px",
+          }}
         >
           <Form.Item name="firstName" label="Имя" rules={[FieldRules.Required, FieldRules.ClientName]}>
             <Input placeholder="Имя" />
