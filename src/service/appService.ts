@@ -10,7 +10,7 @@ export interface AddOrder {
   lastName: string
   phone: string
   product: string
-  amount: string
+  amount: number
   orderDt: string
 }
 

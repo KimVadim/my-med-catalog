@@ -4,7 +4,7 @@ import { useState } from "react";
 import { productItems } from "../data/ProductItems.tsx";
 import { addOrder, AddOrder } from "../service/appService.ts";
 import dayjs from "dayjs";
-import { FieldFormat } from "../data/appConstant.ts";
+import { FieldRules } from "../data/appConstant.ts";
 
 const { Title, Text } = Typography;
 
@@ -21,6 +21,7 @@ export default function CheckoutPage() {
       setLoading(false);
       form.resetFields();
       navigate(-1)
+      window.location.href = "https://pay.kaspi.kz/pay/4nxkybt1";
     });
   };
 
@@ -54,21 +55,21 @@ export default function CheckoutPage() {
           initialValues={{
             phone: '+7',
             product: product.title,
-            orderDt: dayjs(dayjs().format(FieldFormat.Date), FieldFormat.Date).toString(),
-            amount: product.price.toString(),
+            orderDt: dayjs().toISOString(),
+            amount: product.price,
           }}
           form={form}
         >
-          <Form.Item name="firstName" label="Имя" rules={[{ required: true }]}>
+          <Form.Item name="firstName" label="Имя" rules={[FieldRules.Required, FieldRules.ClientName]}>
             <Input placeholder="Имя" />
           </Form.Item>
-          <Form.Item name="lastName" label="Фамилия" rules={[{ required: true }]}>
+          <Form.Item name="lastName" label="Фамилия" rules={[FieldRules.Required, FieldRules.ClientName]}>
             <Input placeholder="Фамилия" />
           </Form.Item>
           <Form.Item
             name="phone"
             label="Номер телефона"
-            rules={[{ required: true }]}
+            rules={[FieldRules.Required, FieldRules.PhoneNum]}
           >
             <Input placeholder="+7 (777) 123-45-67" />
           </Form.Item>
@@ -84,8 +85,12 @@ export default function CheckoutPage() {
             <Button onClick={() => navigate(-1)}>Назад</Button>
           </div>
           <div className="flex gap-2 mt-4">
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Оплатить (скоро)
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+            >
+              Оплатить (Kaspi)
             </Button>
           </div>
 
