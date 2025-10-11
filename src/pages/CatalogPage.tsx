@@ -13,12 +13,17 @@ const CatalogPage = () => {
         minHeight: "100vh",
         backgroundColor: "#f5f5f5",
         padding: "16px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        overflowY: "auto",
       }}
     >
       <Card
         style={{
           borderRadius: "16px",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          maxWidth: '500px',
         }}
       >
         <div

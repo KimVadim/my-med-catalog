@@ -20,8 +20,8 @@ export enum FieldFormat {
 export const FieldRules = {
   Required: { required: true, message: 'Заполните поле!' },
   PhoneNum: {
-    pattern: /^\+7\d{10}$/,
-    message: 'Формат номера +7 000 000 00 00',
+    pattern: /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/,
+    message: 'Формат номера +7 (000) 000-00-00',
   },
   ClientName: { pattern: /^[A-Za-zА-Яа-яЁё]+$/, message: 'Только буквы!' },
   PaymentAmount: {
