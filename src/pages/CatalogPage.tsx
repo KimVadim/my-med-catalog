@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { List, Card, Tag } from "antd-mobile";
+import { List, Card } from "antd-mobile";
 import { useNavigate } from "react-router-dom";
 import { productItems } from "../data/ProductItems.tsx";
+import { Typography } from "antd";
+const { Text } = Typography;
 
 const CatalogPage = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -62,6 +64,7 @@ const CatalogPage = () => {
             "--border-top": "none",
             "--border-bottom": "none",
             "--border-inner": "1px solid #f0f0f0",
+            borderBottom: "1px solid #f0f0f0",
           }}
         >
           {productItems.map((item, index) => (
@@ -91,19 +94,25 @@ const CatalogPage = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      marginRight: '10px'
                     }}
                   >
                     {item.icon}
                   </div>
                 }
                 extra={
-                  <Tag
-                    color="#868686ff"
-                    fill="outline"
-                    style={{ "--border-radius": "6px", fontSize: "16px" }}
-                  >
-                    {item.priceName}
-                  </Tag>
+
+                              <Text
+              style={{
+                fontSize: "14px",
+                padding: "6px 8px",
+                backgroundColor: "#edc56eff",
+                borderRadius: "6px",
+                fontWeight: 700,
+              }}
+            >
+               {item.priceName}
+            </Text>
                 }
                 onClick={() => navigate(`/checkout/${item.id}`)} // <-- переход
                 style={{
@@ -111,6 +120,7 @@ const CatalogPage = () => {
                   cursor: "pointer",
                   backgroundColor: "transparent",
                 }}
+                description={item.description}
               >
                 <div
                   style={{
