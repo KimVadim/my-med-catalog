@@ -5,7 +5,6 @@ import { productItems } from "../data/ProductItems.tsx";
 import { addOrder, AddOrder } from "../service/appService.ts";
 import dayjs from "dayjs";
 import { FieldRules } from "../data/appConstant.ts";
-import { Grid } from "antd-mobile";
 import {
   CreditCardOutlined,
   LeftOutlined,
@@ -29,7 +28,7 @@ export default function CheckoutPage() {
       setLoading(false);
       form.resetFields();
       navigate('/');
-      window.location.href = "https://pay.kaspi.kz/pay/4nxkybt1";
+      window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
     });
   };
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,14 +86,10 @@ export default function CheckoutPage() {
           Пожалуйста, проверьте детали и перейдите к оплате.
         </Text>
         <Divider />
-        <Grid columns={3} gap={8}>
-          <Grid.Item>
-            <Text strong  type="secondary">Продукт: </Text>
-          </Grid.Item>
-          <Grid.Item span={2}>
-            <Text strong>{product.title}</Text>
-          </Grid.Item>
-        </Grid>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px"}}>
+          <Text strong style={{marginRight: '5px', marginTop: '2px'}} type="secondary">Продукт: </Text>
+          <Text strong style={{fontSize: '16px'}}>{product.title}</Text>
+        </div>
         <Form
           layout="vertical"
           onFinish={handleSubmit}
