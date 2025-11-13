@@ -42,7 +42,7 @@ export default function CheckoutPage() {
       if (window.Telegram?.WebApp) {
         try {
           // openLink принимает только URL
-          window.Telegram.WebApp.openLink(paymentUrl);
+          window.Telegram.WebApp.openLink(paymentUrl, { try_instant_view: false });
         } catch (error) {
           console.error('Telegram openLink failed:', error);
           // Fallback
