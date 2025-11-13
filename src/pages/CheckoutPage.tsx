@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Input, Button, Typography, Card, Form, Divider } from "antd";
+import { Input, Button, Typography, Card, Form, Divider, message } from "antd";
 import { useState } from "react";
 import { productItems } from "../data/ProductItems.tsx";
 import { addOrder, AddOrder } from "../service/appService.ts";
@@ -33,29 +33,67 @@ export default function CheckoutPage() {
   const productItem = productItems.filter((x) => x.id === productId );
   const product = productItem && productItem?.[0]
   const paymentUrl = "https://pay.kaspi.kz/pay/todlxgem";
-  const handleSubmit = (values: AddOrder) => {
+
+
+  const showError = (title: string, description?: string) => {
+    message.error({
+      content: (
+        <div>
+          <strong>{title}</strong>
+          {description && <div style={{ marginTop: 8, fontSize: 12 }}>{description}</div>}
+        </div>
+      ),
+      duration: 5,
+    });
+  };
+
+  const openPaymentLink = (url: string) => {
+    if (window.Telegram?.WebApp?.openLink) {
+      try {
+        window.Telegram.WebApp.openLink(url, { try_instant_view: true });
+        return true;
+      } catch (err) {
+        console.warn('Telegram.WebApp.openLink failed:', err);
+        // fallback
+      }
+    }
+
+    // Fallback: открыть в новой вкладке
+    const opened = window.open(url, '_blank');
+    if (!opened) {
+      alert('Не удалось открыть ссылку. Попробуйте вручную: ' + url);
+    }
+    return !!opened;
+  };
+
+  const handleSubmit = async (values: AddOrder) => {
     setLoading(true);
-    addOrder(values).then(() => {
-      setLoading(false);
+
+    try {
+      await addOrder(values);
+
+      // Успешно отправлено
       form.resetFields();
       navigate('/');
 
-    if (window.Telegram?.WebApp) {
-      const platform = window.Telegram.WebApp.platform;
-      if (platform === 'android') {
-        window.open(paymentUrl, '_blank');
-      } else {
-        window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
+      // Пытаемся открыть оплату
+      const opened = openPaymentLink(paymentUrl);
+      if (!opened) {
+        showError('Не удалось открыть оплату. Скопируйте ссылку:', paymentUrl);
       }
-    } else {
-      window.open(paymentUrl, '_blank');
-    }
 
-    }).catch((error) => {
-      window.open(paymentUrl, '_blank');
-      setLoading(false);
+    } catch (error: any) {
       console.error('Order submission failed:', error);
-    });
+
+      // Показываем пользователю понятную ошибку
+      const message = error?.message || 'Ошибка сети. Попробуйте позже.';
+      showError('Заказ не отправлен', message);
+
+      // Даже при ошибке — даём оплатить (если нужно)
+      openPaymentLink(paymentUrl);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
