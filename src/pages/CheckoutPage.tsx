@@ -11,6 +11,18 @@ import {
 } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp?: {
+        openLink: (url: string) => void;
+        close?: () => void;
+        initData?: string;
+        initDataUnsafe?: any;
+      };
+    };
+  }
+}
 
 export default function CheckoutPage() {
   const [form] = Form.useForm();
@@ -36,23 +48,6 @@ export default function CheckoutPage() {
     });
   };
 
-  const openPaymentLink = (url: string) => {
-    try {
-      window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
-      return true;
-    } catch (err) {
-      console.warn('Telegram.WebApp.openLink failed:', err);
-      // fallback
-    }
-
-    // Fallback: открыть в новой вкладке
-    const opened = window.open(url, '_blank');
-    if (!opened) {
-      alert('Не удалось открыть ссылку. Попробуйте вручную: ' + url);
-    }
-    return !!opened;
-  };
-
   const handleSubmit = async (values: AddOrder) => {
     setLoading(true);
 
@@ -64,9 +59,10 @@ export default function CheckoutPage() {
       navigate('/');
 
       // Пытаемся открыть оплату
-      const opened = openPaymentLink(paymentUrl);
-      if (!opened) {
-        showError('Не удалось открыть оплату. Скопируйте ссылку:', paymentUrl);
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.openLink(paymentUrl);
+      } else {
+        window.location.href = paymentUrl;
       }
 
     } catch (error: any) {
@@ -75,9 +71,6 @@ export default function CheckoutPage() {
       // Показываем пользователю понятную ошибку
       const message = error?.message || 'Ошибка сети. Попробуйте позже.';
       showError('Заказ не отправлен', message);
-
-      // Даже при ошибке — даём оплатить (если нужно)
-      openPaymentLink(paymentUrl);
     } finally {
       setLoading(false);
     }
