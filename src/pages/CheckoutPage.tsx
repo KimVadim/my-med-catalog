@@ -38,13 +38,18 @@ export default function CheckoutPage() {
       setLoading(false);
       form.resetFields();
       navigate('/');
-      if (window.Telegram?.WebApp) {
-        window.Telegram.WebApp.openLink("https://pay.kaspi.kz/pay/todlxgem");
-      } else {
-        window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
-      }
+
+      const paymentUrl = "https://pay.kaspi.kz/pay/todlxgem";
+
+      // Используем window.open - работает и в Telegram WebApp, и в браузере
+      window.open(paymentUrl, '_blank');
+
+    }).catch((error) => {
+      setLoading(false);
+      console.error('Order submission failed:', error);
     });
   };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ""); // удалить все недопустимые символы
 
