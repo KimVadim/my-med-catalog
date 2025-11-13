@@ -12,17 +12,6 @@ import {
 
 const { Title, Text } = Typography;
 
-declare global {
-  interface Window {
-    Telegram?: {
-      WebApp?: {
-        openLink: (url: string, options?: { try_instant_view?: boolean }) => void;
-        platform?: string;
-      };
-    };
-  }
-}
-
 export default function CheckoutPage() {
   const [form] = Form.useForm();
   const { productId } = useParams();
@@ -48,14 +37,12 @@ export default function CheckoutPage() {
   };
 
   const openPaymentLink = (url: string) => {
-    if (window.Telegram?.WebApp?.openLink) {
-      try {
-        window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
-        return true;
-      } catch (err) {
-        console.warn('Telegram.WebApp.openLink failed:', err);
-        // fallback
-      }
+    try {
+      window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
+      return true;
+    } catch (err) {
+      console.warn('Telegram.WebApp.openLink failed:', err);
+      // fallback
     }
 
     // Fallback: открыть в новой вкладке
