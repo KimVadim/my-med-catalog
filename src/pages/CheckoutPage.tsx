@@ -17,6 +17,7 @@ declare global {
     Telegram?: {
       WebApp?: {
         openLink: (url: string, options?: { try_instant_view?: boolean }) => void;
+        platform?: string;
       };
     };
   }
@@ -39,18 +40,16 @@ export default function CheckoutPage() {
       form.resetFields();
       navigate('/');
 
-      if (window.Telegram?.WebApp) {
-        try {
-          // openLink принимает только URL
-          window.Telegram.WebApp.openLink(paymentUrl, { try_instant_view: false });
-        } catch (error) {
-          console.error('Telegram openLink failed:', error);
-          // Fallback
-          window.open(paymentUrl, '_blank');
-        }
-      } else {
+    if (window.Telegram?.WebApp) {
+      const platform = window.Telegram.WebApp.platform;
+      if (platform === 'android') {
         window.open(paymentUrl, '_blank');
+      } else {
+        window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
       }
+    } else {
+      window.open(paymentUrl, '_blank');
+    }
 
     }).catch((error) => {
       window.open(paymentUrl, '_blank');
