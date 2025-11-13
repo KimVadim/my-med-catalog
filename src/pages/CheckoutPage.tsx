@@ -12,6 +12,16 @@ import {
 
 const { Title, Text } = Typography;
 
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp?: {
+        openLink: (url: string) => void;
+      };
+    };
+  }
+}
+
 export default function CheckoutPage() {
   const [form] = Form.useForm();
   const { productId } = useParams();
@@ -28,7 +38,11 @@ export default function CheckoutPage() {
       setLoading(false);
       form.resetFields();
       navigate('/');
-      window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.openLink("https://pay.kaspi.kz/pay/todlxgem");
+      } else {
+        window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
+      }
     });
   };
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
