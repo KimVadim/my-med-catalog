@@ -39,12 +39,16 @@ export default function CheckoutPage() {
       form.resetFields();
       navigate('/');
 
-      try {
-        // openLink принимает только URL
-        window.location.href = paymentUrl;
-      } catch (error) {
-        console.error('Telegram openLink failed:', error);
-        // Fallback
+      if (window.Telegram?.WebApp) {
+        try {
+          // openLink принимает только URL
+          window.Telegram.WebApp.openLink(paymentUrl);
+        } catch (error) {
+          console.error('Telegram openLink failed:', error);
+          // Fallback
+          window.open(paymentUrl, '_blank');
+        }
+      } else {
         window.open(paymentUrl, '_blank');
       }
 
