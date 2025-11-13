@@ -50,7 +50,7 @@ export default function CheckoutPage() {
   const openPaymentLink = (url: string) => {
     if (window.Telegram?.WebApp?.openLink) {
       try {
-        window.Telegram.WebApp.openLink(url, { try_instant_view: true });
+        window.location.href = "https://pay.kaspi.kz/pay/todlxgem";
         return true;
       } catch (err) {
         console.warn('Telegram.WebApp.openLink failed:', err);
