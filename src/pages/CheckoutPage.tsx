@@ -31,20 +31,17 @@ export default function CheckoutPage() {
 
   const productItem = productItems.filter((x) => x.id === productId );
   const product = productItem && productItem?.[0]
-
+  const paymentUrl = "https://pay.kaspi.kz/pay/todlxgem";
   const handleSubmit = (values: AddOrder) => {
     setLoading(true);
     addOrder(values).then(() => {
       setLoading(false);
       form.resetFields();
       navigate('/');
-
-      const paymentUrl = "https://pay.kaspi.kz/pay/todlxgem";
-
-      // Используем window.open - работает и в Telegram WebApp, и в браузере
-      window.open(paymentUrl, '_blank');
+      window.location.href = paymentUrl;
 
     }).catch((error) => {
+      window.open(paymentUrl, '_blank');
       setLoading(false);
       console.error('Order submission failed:', error);
     });
