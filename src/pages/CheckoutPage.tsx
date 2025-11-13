@@ -16,7 +16,7 @@ declare global {
   interface Window {
     Telegram?: {
       WebApp?: {
-        openLink: (url: string) => void;
+        openLink: (url: string, options?: { try_instant_view?: boolean }) => void;
       };
     };
   }
@@ -38,7 +38,15 @@ export default function CheckoutPage() {
       setLoading(false);
       form.resetFields();
       navigate('/');
-      window.location.href = paymentUrl;
+
+      try {
+        // openLink принимает только URL
+        window.location.href = paymentUrl;
+      } catch (error) {
+        console.error('Telegram openLink failed:', error);
+        // Fallback
+        window.open(paymentUrl, '_blank');
+      }
 
     }).catch((error) => {
       window.open(paymentUrl, '_blank');
